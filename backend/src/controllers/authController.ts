@@ -114,6 +114,34 @@ class AuthController {
     });
     res.status(200).json({ message: "Login successful" });
   }
+  async logout(req: Request, res: Response, next: NextFunction) {
+    const refreshToken = req.cookies?.refreshToken;
+    if (!refreshToken) {
+      return res.status(200).json({ message: "Logged out successfully" });
+    }
+
+    // Hash the token before searching in DB (assuming tokens are stored hashed)
+    const hashedRefreshToken = cryptoUtils.hashToken(refreshToken);
+
+    // Delete refresh token from DB
+    await prisma.refreshToken.deleteMany({
+      where: { token: hashedRefreshToken },
+    });
+
+    // Clear cookies
+    res.clearCookie("refreshToken", {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "lax",
+    });
+    res.clearCookie("token", {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "lax",
+    });
+
+    return res.status(200).json({ message: "Logged out successfully" });
+  }
 }
 
 export default new AuthController();

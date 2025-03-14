@@ -1,4 +1,4 @@
-import UrlService from "../services/apiServices";
+import { urlService } from "../services/apiServices";
 import { defineStore } from "pinia";
 
 export const useUrlStore = defineStore("urlStore", {
@@ -14,8 +14,8 @@ export const useUrlStore = defineStore("urlStore", {
       this.loading = true;
       this.error = "";
       try {
-        const data = await UrlService.shortenUrl(original);
-          this.shortUrl = data.short;
+        const data = await urlService.shortenUrl(original);
+        this.shortUrl = data.short;
       } catch (error) {
         console.error("Shorten URL Error:", error);
         this.error = "Failed to shorten URL";
@@ -24,12 +24,12 @@ export const useUrlStore = defineStore("urlStore", {
       }
     },
 
-    async getUrlStats(shortCode: string){
+    async getUrlStats(shortCode: string) {
       this.loading = true;
       this.error = "";
       try {
-        const data = await UrlService.getUrlStats(shortCode);
-          this.stats = data;
+        const data = await urlService.getUrlStats(shortCode);
+        this.stats = data;
       } catch (error) {
         console.error("Fetch Stats Error:", error);
         this.error = "Failed to fetch stats";

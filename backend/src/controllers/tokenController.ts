@@ -89,5 +89,28 @@ class TokenController {
 
     return res.status(200).json({ accessToken: newAccessToken });
   }
+  async verifySession(req: Request, res: Response, next: NextFunction) {
+    const token = req.cookies.accessToken;
+
+    if (!token) {
+      return res.status(401).json({ message: "No token found" });
+    }
+
+    // Verify token
+    const decoded = jwtServices.verifyToken(token) as {
+      id: string;
+      email: string;
+      role: string;
+    };
+
+    // Return user data
+    return res.status(200).json({
+      user: {
+        id: decoded.id,
+        email: decoded.email,
+        role: decoded.role,
+      },
+    });
+  }
 }
 export default new TokenController();
