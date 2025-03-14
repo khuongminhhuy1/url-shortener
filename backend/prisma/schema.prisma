@@ -13,6 +13,11 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum Role {
+  USER
+  ADMIN
+}
+
 model ShortURL {
   id         String @id @default(uuid()) 
   original   String
@@ -21,4 +26,39 @@ model ShortURL {
   createdAt  DateTime @default(now())
 
   @@map("short_urls")
+}
+
+model User {
+  id        String   @id  @default(cuid())
+  email     String   @unique
+  name      String?
+  password  String
+  role      Role     @default(USER)
+  verified  Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  refreshToken RefreshToken?
+  verificationToken VerificationToken?
+  @@map("users")
+}
+
+model VerificationToken {
+  id        String   @id @default(cuid())
+  token     String   @unique
+  userId    String   @unique
+  user    User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+
+  @@map("verification_tokens")
+}
+
+model RefreshToken {
+  id         String   @id @default(uuid()) // Unique ID
+  token      String   @unique              // The refresh token itself
+  userId     String   @unique              // Link to User model
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  expiresAt  DateTime // Expiry date for the token
+  createdAt  DateTime @default(now()) // When the token was created
+
+  @@map("refresh_tokens")
 }

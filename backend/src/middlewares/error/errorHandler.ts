@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 
-export class AppError extends Error {
+class AppError extends Error {
   status: number;
   constructor(message: string, status: number) {
     super(message);
@@ -8,7 +8,7 @@ export class AppError extends Error {
   }
 }
 
-export const errorHandler = (
+const errorHandler = (
   err: any,
   req: Request,
   res: Response,
@@ -19,3 +19,5 @@ export const errorHandler = (
     message: err.message || "Internal Server Error",
   });
 };
+
+export { AppError, errorHandler };
