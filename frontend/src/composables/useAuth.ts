@@ -60,7 +60,7 @@ export function useAuth() {
     try {
       await authService.logout();
       authStore.setUser(null);
-      router.push("/"); // Redirect after logout
+      router.push("/");
     } catch (error: any) {
       console.error("Logout Error:", error);
     } finally {

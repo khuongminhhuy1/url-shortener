@@ -1,40 +1,40 @@
-import { urlService } from "../services/apiServices";
 import { defineStore } from "pinia";
+import { urlService } from "../services/apiServices";
+
+interface UserUrl {
+  id: string;
+  shortCode: string;
+  original: string;
+  clicks: number;
+  createdAt: string;
+  userId: string;
+}
 
 export const useUrlStore = defineStore("urlStore", {
   state: () => ({
-    shortUrl: "",
-    stats: null as { clicks: number } | null,
-    error: "",
-    loading: false,
+    urls: [] as UserUrl[],
   }),
-
+  persist: {
+    key: "urlStore",
+    storage: window.localStorage,
+  },
   actions: {
     async shortenUrl(original: string) {
-      this.loading = true;
-      this.error = "";
       try {
-        const data = await urlService.shortenUrl(original);
-        this.shortUrl = data.short;
+        const response = await urlService.shortenUrl(original);
+        if (response) {
+          this.urls.unshift(response); // Add new URL at the beginning
+        }
       } catch (error) {
         console.error("Shorten URL Error:", error);
-        this.error = "Failed to shorten URL";
-      } finally {
-        this.loading = false;
       }
     },
-
-    async getUrlStats(shortCode: string) {
-      this.loading = true;
-      this.error = "";
+    async getUserUrls(userId: string) {
       try {
-        const data = await urlService.getUrlStats(shortCode);
-        this.stats = data;
+        const response = await urlService.getUserUrls(userId);
+        this.urls = response;
       } catch (error) {
-        console.error("Fetch Stats Error:", error);
-        this.error = "Failed to fetch stats";
-      } finally {
-        this.loading = false;
+        console.error("Failed to fetch user URLs:", error);
       }
     },
   },

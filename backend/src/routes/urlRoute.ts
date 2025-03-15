@@ -17,4 +17,15 @@ router.get(
   catchAsync(urlController.getStats)
 );
 
+router.get(
+  "/:userId/urls",
+  catchAsync(authMiddleware.authenticate),
+  catchAsync(urlController.getUserUrls)
+);
+router.delete(
+  "/:id",
+  catchAsync(authMiddleware.authenticate),
+  catchAsync(urlController.deleteUrl)
+);
+
 export default router;

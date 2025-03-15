@@ -1,13 +1,17 @@
 import AxiosServices from "./AxiosServices";
 
 class UrlService extends AxiosServices {
-  async shortenUrl(url: string): Promise<{ short: string }> {
+  async shortenUrl(url: string) {
     const response = await this.post("/api/url/shorten", { original: url });
     return response.data;
   }
 
   async getUrlStats(shortCode: string): Promise<{ clicks: number }> {
     const response = await this.get(`/api/url/stats/${shortCode}`);
+    return response.data;
+  }
+  async getUserUrls(userId: string) {
+    const response = await this.get(`/api/url/${userId}/urls`);
     return response.data;
   }
 }

@@ -10,7 +10,7 @@
     <button
       v-else
       @click="goToLogin"
-      class="mt-3 px-6 py-2 bg-blue-500 text-white rounded-lg"
+      class="mt-3 px-6 py-2 bg-blue-500 rounded-lg"
     >
       Login to Create Short URL
     </button>

@@ -7,7 +7,10 @@ export const useAuthStore = defineStore("auth", {
     user: null as NormalUser | AdminUser | null,
     isAuthenticated: false,
   }),
-
+  persist: {
+    key: "auth",
+    storage: window.localStorage,
+  },
   actions: {
     setUser(data: UserData | null) {
       if (data) {
@@ -25,13 +28,7 @@ export const useAuthStore = defineStore("auth", {
     logout() {
       this.user = null;
       this.isAuthenticated = false;
-      localStorage.removeItem("auth"); 
+      localStorage.removeItem("auth");
     },
-  },
-
-  persist: {
-    key: "auth",
-    storage: localStorage,
-    pick: ["user", "isAuthenticated"]
   },
 });

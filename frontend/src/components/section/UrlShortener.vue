@@ -28,5 +28,8 @@ import { useUrlStore } from "../../store/urlStore";
 const store = useUrlStore();
 const url = ref("");
 
-const shorten = () => store.shortenUrl(url.value);
+const shorten = () => {
+  store.shortenUrl(url.value);
+  alert("Url created");
+};
 </script>

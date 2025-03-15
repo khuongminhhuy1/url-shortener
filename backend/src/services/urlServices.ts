@@ -37,5 +37,6 @@ class UrlService {
       },
     });
   }
+  
 }
 export default new UrlService();

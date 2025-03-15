@@ -58,6 +58,5 @@ const router = useRouter();
 
 const handleLogout = () => {
   auth.logout();
-  router.push("/");
 };
 </script>

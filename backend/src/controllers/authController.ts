@@ -115,7 +115,7 @@ class AuthController {
   }
   async logout(req: Request, res: Response, next: NextFunction) {
     const refreshToken = req.cookies?.refreshToken;
-    console.log("refresh token: " ,refreshToken)
+    console.log("refresh token: ", refreshToken);
     if (refreshToken) {
       // Hash the token
       const hashedRefreshToken = cryptoUtils.hashToken(refreshToken);
@@ -140,7 +140,6 @@ class AuthController {
         }
       }
     }
-
     // Clear cookies regardless
     res.clearCookie("refreshToken", cookieOptions);
     res.clearCookie("accessToken", cookieOptions);
