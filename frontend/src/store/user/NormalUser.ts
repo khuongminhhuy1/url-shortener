@@ -1,8 +1,8 @@
 import User from "./User";
 
 export default class NormalUser extends User {
-  constructor(id: string, name: string, email: string) {
-    super(id, name, email, "USER");
+  constructor(userId: string, name: string, email: string) {
+    super(userId, name, email, "USER");
   }
   login() {
     console.log(`${this.name} is logging in as a regular user...`);

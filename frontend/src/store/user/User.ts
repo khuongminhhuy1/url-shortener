@@ -1,14 +1,14 @@
 export default class User {
-  protected id: string;
+  protected userId: string;
   public name: string;
   public email: string;
   protected role: string;
-  constructor(id: string, name: string, email: string, role: string) {
+  constructor(userId: string, name: string, email: string, role: string) {
     if (new.target === User) {
       throw new Error("Cannot instantiate an abstract class directly");
     }
 
-    this.id = id;
+    this.userId = userId;
     this.name = name;
     this.email = email;
     this.role = role;

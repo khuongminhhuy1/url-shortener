@@ -8,10 +8,14 @@ class UrlController {
   async shortenUrl(req: Request, res: Response, next: NextFunction) {
     try {
       const { original } = req.body;
+      const userId = req.user?.userId;
       if (!original) {
         return next(new AppError("Please provide a valid URL", 400));
       }
-      const newUrl = await urlServices.generateShortUrl(original);
+      if (!userId) {
+        return next(new AppError("User authentication required", 401));
+      }
+      const newUrl = await urlServices.generateShortUrl(original, userId);
       console.log("Shortened URL saved:", newUrl);
       return res.status(201).json(newUrl);
     } catch (error) {

@@ -23,7 +23,7 @@
 
 <script setup>
 import { ref } from "vue";
-import { useUrlStore } from "../store/urlStore";
+import { useUrlStore } from "../../store/urlStore";
 
 const store = useUrlStore();
 const url = ref("");

@@ -5,6 +5,7 @@ import jwtServices from "../services/jwtServices";
 import { AppError } from "../middlewares/error/errorHandler";
 import emailServices from "../services/emailServices";
 import cryptoUtils from "../utils/cryptoUtils";
+import { cookieOptions } from "../types/cookiesOptions";
 
 const prisma = new PrismaClient();
 
@@ -93,52 +94,56 @@ class AuthController {
 
     const token = jwtServices.generateToken({
       userId: user.id,
-      username: user.name,
+      name: user.name,
+      email: user.email,
     });
 
     const refreshToken = jwtServices.generateRefreshToken({
       userId: user.id,
     });
-
-    res.cookie("accessToken", token, {
-      httpOnly: true,
-      secure: true,
-      sameSite: "strict",
-      maxAge: 15 * 60 * 1000,
+    const hashedRefreshToken = cryptoUtils.hashToken(refreshToken);
+    await prisma.refreshToken.create({
+      data: {
+        token: hashedRefreshToken,
+        expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), // Set expiration date
+        user: { connect: { id: user.id } }, // Connect the user
+      },
     });
-    res.cookie("refreshToken", refreshToken, {
-      httpOnly: true,
-      secure: true,
-      sameSite: "strict",
-      maxAge: 7 * 24 * 60 * 60 * 1000,
-    });
-    res.status(200).json({ message: "Login successful" });
+    res.cookie("accessToken", token, cookieOptions);
+    res.cookie("refreshToken", refreshToken, cookieOptions);
+    res.status(200).json({ message: "Login successful", token: token });
   }
   async logout(req: Request, res: Response, next: NextFunction) {
     const refreshToken = req.cookies?.refreshToken;
-    if (!refreshToken) {
-      return res.status(200).json({ message: "Logged out successfully" });
+    console.log("refresh token: " ,refreshToken)
+    if (refreshToken) {
+      // Hash the token
+      const hashedRefreshToken = cryptoUtils.hashToken(refreshToken);
+
+      // First check if the token exists
+      const existingToken = await prisma.refreshToken.findFirst({
+        where: { token: hashedRefreshToken },
+      });
+
+      if (existingToken) {
+        // Delete the token if found
+        await prisma.refreshToken.delete({
+          where: { id: existingToken.id },
+        });
+      } else {
+        // If not found, check all refresh tokens for this user (if user ID is available)
+        if (req.user?.userId) {
+          const userTokens = await prisma.refreshToken.findMany({
+            where: { userId: req.user.userId },
+          });
+          console.log(`User has ${userTokens.length} tokens in database`);
+        }
+      }
     }
 
-    // Hash the token before searching in DB (assuming tokens are stored hashed)
-    const hashedRefreshToken = cryptoUtils.hashToken(refreshToken);
-
-    // Delete refresh token from DB
-    await prisma.refreshToken.deleteMany({
-      where: { token: hashedRefreshToken },
-    });
-
-    // Clear cookies
-    res.clearCookie("refreshToken", {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "lax",
-    });
-    res.clearCookie("token", {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "lax",
-    });
+    // Clear cookies regardless
+    res.clearCookie("refreshToken", cookieOptions);
+    res.clearCookie("accessToken", cookieOptions);
 
     return res.status(200).json({ message: "Logged out successfully" });
   }

@@ -24,10 +24,10 @@ class AuthService extends AxiosServices {
       email,
       password,
     });
-    return response;
+    return response.data;
   }
   async logout() {
-    const response = await this.post("/api/auth/logout", {});
+    const response = await this.post("/api/auth/logout");
     return response;
   }
   async verifySession() {

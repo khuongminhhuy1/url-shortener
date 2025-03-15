@@ -39,7 +39,8 @@ export function useAuth() {
     errorMessage.value = "";
     try {
       const response = await authService.login(email, password);
-      const token: string = response.data.data.token;
+
+      const token: string = response.token;
 
       const decoded = jwtDecode<UserData>(token);
       console.log(decoded);

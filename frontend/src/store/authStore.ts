@@ -13,8 +13,8 @@ export const useAuthStore = defineStore("auth", {
       if (data) {
         this.user =
           data.role === "ADMIN"
-            ? new AdminUser(data.id, data.name, data.email)
-            : new NormalUser(data.id, data.name, data.email);
+            ? new AdminUser(data.userId, data.name, data.email)
+            : new NormalUser(data.userId, data.name, data.email);
         this.isAuthenticated = true;
       } else {
         this.user = null;
@@ -32,5 +32,6 @@ export const useAuthStore = defineStore("auth", {
   persist: {
     key: "auth",
     storage: localStorage,
+    pick: ["user", "isAuthenticated"]
   },
 });

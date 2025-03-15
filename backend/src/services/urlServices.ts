@@ -5,10 +5,10 @@ class UrlService {
   constructor() {
     this.prisma = new PrismaClient();
   }
-  async generateShortUrl(original: string): Promise<ShortURL> {
+  async generateShortUrl(original: string, userId: string): Promise<ShortURL> {
     const shortCode = Math.random().toString(36).substring(2, 8);
     return this.prisma.shortURL.create({
-      data: { original, shortCode },
+      data: { original, shortCode, user: { connect: { id: userId } } },
     });
   }
   async getOriginalUrl(shortCode: string): Promise<ShortURL | null> {
@@ -33,6 +33,7 @@ class UrlService {
         shortCode: true,
         clicks: true,
         createdAt: true,
+        userId: true,
       },
     });
   }

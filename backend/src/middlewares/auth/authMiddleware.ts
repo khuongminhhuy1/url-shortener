@@ -13,13 +13,21 @@ declare global {
 
 class AuthMiddleware {
   authenticate = async (req: Request, res: Response, next: NextFunction) => {
+    // First try to get token from Authorization header
+    let accessToken;
     const authHeader = req.headers.authorization;
 
-    if (!authHeader || !authHeader.startsWith("Bearer ")) {
-      return next(new AppError("Access token is required", 401));
+    if (authHeader && authHeader.startsWith("Bearer ")) {
+      accessToken = authHeader.split(" ")[1];
+    }
+    // If not in header, try to get from cookies
+    else if (req.cookies && req.cookies.accessToken) {
+      accessToken = req.cookies.accessToken;
     }
 
-    const accessToken = authHeader.split(" ")[1];
+    if (!accessToken) {
+      return next(new AppError("Access token is required", 401));
+    }
 
     const decoded = jwtServices.verifyToken(accessToken) as JwtPayload | null;
     if (!decoded) {
