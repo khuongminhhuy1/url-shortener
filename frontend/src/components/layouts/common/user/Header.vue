@@ -1,6 +1,6 @@
 <template>
   <nav
-    class="p-4 bg-blue-600 text-white flex justify-between items-center shadow"
+    class="p-4 bg-linear-to-bl from-violet-500 to-fuchsia-500 text-white flex justify-between items-center shadow"
   >
     <router-link to="/" class="text-2xl font-bold">ShortenIt</router-link>
 
@@ -38,7 +38,7 @@
     <div v-else>
       <router-link
         to="/login"
-        class="px-4 py-2 bg-white text-blue-600 rounded-lg hover:bg-gray-200"
+        class="px-4 py-2 bg-white text-fuchsia-600 rounded-lg hover:bg-gray-200"
       >
         Login
       </router-link>

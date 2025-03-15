@@ -1,12 +1,11 @@
 <template>
   <div
-    class="flex flex-col min-h-screen bg-cover bg-white bg-center bg-fixed relative"
+    class="flex flex-col min-h-screen relative"
   >
     <!-- Sticky Header Section -->
     <Header
       class="sticky top-0 z-50 backdrop-blur shadow-md pb-4 border-b-1 border-amber-50"
     />
-
     <!-- Main Content Section -->
     <main class="w-full">
       <div class="w-full">
