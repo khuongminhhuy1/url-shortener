@@ -18,7 +18,7 @@ The URL Shortener is a web application that allows users to convert long URLs in
 
 - **Node.js** with **Express.js**: Server-side logic and API handling.
 - **Prisma ORM**: Database modeling and querying.
-- **PostgreSQL**: Primary database system.
+- **mySQL**: Primary database system.
 - **JWT**: Secure user authentication.
 - **Nodemailer**: Email services for user verification.
 
