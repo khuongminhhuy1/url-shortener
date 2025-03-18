@@ -28,18 +28,10 @@ class UrlController {
     if (!url) {
       return next(new AppError("URL not found", 404));
     }
+
     await urlServices.incrementClickCount(shortCode);
-    return res.redirect(url.original);
-  }
-  async getStats(req: Request, res: Response, next: NextFunction) {
-    const { shortCode } = req.params;
-    const urlStats = await urlServices.getStats(shortCode);
 
-    if (!urlStats) {
-      return next(new AppError("Stats not found", 404));
-    }
-
-    return res.json(urlStats);
+    return res.json({ original: url.original });
   }
   async getUserUrls(req: Request, res: Response) {
     const userId = req.user?.userId;
@@ -79,6 +71,21 @@ class UrlController {
     await prisma.shortURL.delete({ where: { id } });
 
     return res.status(200).json({ message: "URL deleted successfully" });
+  }
+  async getStats(req: Request, res: Response, next: NextFunction) {
+    try {
+      const { shortCode } = req.params;
+
+      const urlStats = await urlServices.getStats(shortCode);
+
+      if (!urlStats) {
+        return next(new AppError("Stats not found", 404));
+      }
+
+      return res.status(200).json(urlStats);
+    } catch (error) {
+      next(error);
+    }
   }
 }
 export default new UrlController();

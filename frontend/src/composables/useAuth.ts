@@ -4,13 +4,14 @@ import { useRouter } from "vue-router";
 import { useAuthStore } from "../store/authStore";
 import { authService } from "../services/apiServices";
 import { jwtDecode } from "jwt-decode";
+import { useToast } from "vue-toastification";
 
 export function useAuth() {
   const authStore = useAuthStore();
   const router = useRouter();
   const loading = ref<boolean>(false);
   const errorMessage = ref<string>("");
-
+  const toast = useToast();
   async function register(
     name: string,
     email: string,
@@ -21,7 +22,7 @@ export function useAuth() {
 
     try {
       await authService.register(name, email, password);
-      alert(
+      toast.success(
         "Registration successful! Please check your email to verify your account."
       );
       router.push("/login");
@@ -39,12 +40,8 @@ export function useAuth() {
     errorMessage.value = "";
     try {
       const response = await authService.login(email, password);
-
       const token: string = response.token;
-
       const decoded = jwtDecode<UserData>(token);
-      console.log(decoded);
-
       authStore.setUser(decoded);
       router.push("/"); // Redirect after login
     } catch (error: any) {

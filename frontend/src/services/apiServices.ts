@@ -5,6 +5,10 @@ class UrlService extends AxiosServices {
     const response = await this.post("/api/url/shorten", { original: url });
     return response.data;
   }
+  async getOriginalUrl(shortCode: string) {
+    const response = await this.get(`/api/url/${shortCode}`);
+    return response.data;
+  }
 
   async getUrlStats(shortCode: string): Promise<{ clicks: number }> {
     const response = await this.get(`/api/url/stats/${shortCode}`);
@@ -32,10 +36,21 @@ class AuthService extends AxiosServices {
   }
   async logout() {
     const response = await this.post("/api/auth/logout");
-    return response;
+    return response.data;
   }
   async verifySession() {
     const response = await this.get("/api/auth/verify-session");
+    return response;
+  }
+  async forgotPassword(email: string) {
+    const response = await this.post("/api/auth/forgot-password", { email });
+    return response;
+  }
+  async resetPassword(token: string, password: string) {
+    const response = await this.post("/api/auth/reset-password", {
+      token,
+      password,
+    });
     return response;
   }
 }

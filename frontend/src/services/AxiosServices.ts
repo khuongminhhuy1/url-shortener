@@ -1,6 +1,7 @@
 import axios from "axios";
 import { API_SERVER_URL } from "../constants";
 import { useAuthStore } from "../store/authStore";
+import { useToast } from "vue-toastification";
 
 class AxiosService {
   private apiClient = axios.create({
@@ -8,22 +9,31 @@ class AxiosService {
     withCredentials: true,
   });
 
+  private toast = useToast();
+
   constructor() {
     this.apiClient.interceptors.request.use(
       (config) => {
-        // We don't need to manually add the token since it's in the HttpOnly cookie
-        // and will be automatically sent with the request due to withCredentials: true
         return config;
       },
-      (error) => Promise.reject(error)
+      (error) => {
+        this.toast.error("Request error. Please try again.");
+        return Promise.reject(error);
+      }
     );
+
     this.apiClient.interceptors.response.use(
-      (response) => response,
+      (response) => {
+        if (response.data?.message) {
+          this.toast.success(response.data.message);
+        }
+        return response;
+      },
       async (error) => {
         const authStore = useAuthStore();
         const originalRequest = error.config;
 
-        // If the token expired (403 Forbidden), try refreshing it
+        // Handle token expiration (403 Forbidden)
         if (
           error.response &&
           error.response.status === 403 &&
@@ -32,20 +42,23 @@ class AxiosService {
           originalRequest._retry = true;
 
           try {
-            // The /refresh-token endpoint will set new cookies automatically
             await axios.get(`${API_SERVER_URL}/refresh-token`, {
               withCredentials: true,
             });
 
-            // Retry the original request - the new cookies will be sent automatically
+            // Retry the original request - new cookies will be sent automatically
             return this.apiClient(originalRequest);
           } catch (refreshError) {
             console.error("Token refresh failed:", refreshError);
             authStore.logout();
+            this.toast.error("Session expired. Please log in again."); // Notify user
             return Promise.reject(refreshError);
           }
         }
 
+        const errorMessage =
+          error.response?.data?.message || "Something went wrong!";
+        this.toast.error(errorMessage);
         return Promise.reject(error);
       }
     );

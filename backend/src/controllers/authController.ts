@@ -31,6 +31,7 @@ class AuthController {
       data: {
         userId: newUser.id,
         token: verificationToken,
+        expiresAt: new Date(Date.now() + 15 * 60 * 1000),
       },
     });
     await emailServices.sendVerificationEmail(email, verificationToken);
@@ -145,6 +146,75 @@ class AuthController {
     res.clearCookie("accessToken", cookieOptions);
 
     return res.status(200).json({ message: "Logged out successfully" });
+  }
+  async forgotPassword(req: Request, res: Response, next: NextFunction) {
+    const { email } = req.body;
+    if (!email) {
+      return next(new AppError("Email is required", 400));
+    }
+
+    const user = await prisma.user.findUnique({ where: { email } });
+    if (!user) {
+      return next(new AppError("User not found", 404));
+    }
+
+    // Generate reset token
+    const resetToken = cryptoUtils.generateToken();
+    const hashedToken = cryptoUtils.hashToken(resetToken);
+
+    // Store token in the database
+    await prisma.verificationToken.create({
+      data: {
+        userId: user.id,
+        token: hashedToken,
+        expiresAt: new Date(Date.now() + 15 * 60 * 1000), // Expires in 15 minutes
+      },
+    });
+
+    // Send password reset email
+    const resetUrl = `${process.env.APP_URL}/reset-password?token=${resetToken}`;
+    await emailServices.sendEmail(
+      user.email,
+      "Password Reset",
+      `Click the following link to reset your password: ${resetUrl}`,
+      `<p>Click <a href="${resetUrl}">here</a> to reset your password. This link expires in 15 minutes.</p>`
+    );
+
+    res.status(200).json({ message: "Password reset link sent to your email" });
+  }
+
+  async resetPassword(req: Request, res: Response, next: NextFunction) {
+    const { password, token } = req.body;
+
+    if (!token || !password) {
+      return next(new AppError("Token and new password are required", 400));
+    }
+    const hashedToken = cryptoUtils.hashToken(token);
+
+    const resetTokenRecord = await prisma.verificationToken.findUnique({
+      where: { token: hashedToken },
+      include: { user: true },
+    });
+
+    if (!resetTokenRecord || resetTokenRecord.expiresAt < new Date()) {
+      return next(new AppError("Invalid or expired token", 400));
+    }
+
+    // Hash the new password
+    const hashedPassword = await passwordServices.hashPassword(password);
+
+    // Update user password
+    await prisma.user.update({
+      where: { id: resetTokenRecord.userId },
+      data: { password: hashedPassword },
+    });
+
+    // Delete the reset token from the database
+    await prisma.verificationToken.delete({
+      where: { id: resetTokenRecord.id },
+    });
+
+    res.status(200).json({ message: "Password reset successful" });
   }
 }
 

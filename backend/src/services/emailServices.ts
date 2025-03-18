@@ -42,10 +42,10 @@ class EmailService {
   async sendVerificationEmail(to: string, token: string): Promise<void> {
     const verifyLink = `${process.env.SERVER_URL}/api/auth/verify-email?token=${token}`;
     await this.transporter.sendMail({
-      from: `"My App" <${process.env.SMTP_USER}>`,
+      from: `"ShortenIt" <${process.env.SMTP_USER}>`,
       to,
       subject: "Verify Your Email",
-      html: `<p>Click <a href="${verifyLink}">here</a> to verify your email.</p>`,
+      html: `<p>Click <a href="${verifyLink}">here</a> to verify your email at ShortenIt.</p>`,
     });
   }
 }

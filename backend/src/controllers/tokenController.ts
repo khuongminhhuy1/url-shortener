@@ -93,7 +93,7 @@ class TokenController {
     const token = req.cookies.accessToken;
 
     if (!token) {
-      return res.status(401).json({ message: "No token found" });
+      return res.status(401);
     }
 
     // Verify token

@@ -1,48 +1,101 @@
 <template>
-  <div class="min-h-screen flex items-center justify-center bg-gray-100">
-    <div class="bg-white p-6 rounded-lg shadow-lg w-96">
-      <h2 class="text-xl font-semibold text-center">Register</h2>
-
-      <input
-        v-model="name"
-        type="text"
-        placeholder="Full Name"
-        class="w-full p-2 border rounded mt-4"
-      />
-
-      <input
-        v-model="email"
-        type="email"
-        placeholder="Email"
-        class="w-full p-2 border rounded mt-2"
-      />
-
-      <input
-        v-model="password"
-        type="password"
-        placeholder="Password"
-        class="w-full p-2 border rounded mt-2"
-      />
-
-      <button
-        @click="handleRegister"
-        class="w-full mt-4 bg-blue-500 text-white py-2 rounded hover:bg-blue-600"
-      >
-        Register
-      </button>
-
-      <p v-if="errorMessage" class="text-red-500 mt-2 text-center">
-        {{ errorMessage }}
-      </p>
-
-      <p class="mt-4 text-center">
-        Already have an account?
-        <router-link to="/login" class="text-blue-500 hover:underline"
-          >Login</router-link
+  <section
+    class="h-screen flex items-center justify-center bg-gradient-to-r from-fuchsia-500 to-purple-600"
+  >
+    <div
+      class="container w-full max-w-md p-6 bg-white bg-opacity-20 backdrop-blur-lg rounded-lg shadow-lg"
+    >
+      <div class="text-center">
+        <h2
+          class="text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-fuchsia-500 to-purple-600 pb-2"
         >
+          Sign Up
+        </h2>
+        <p class="text-gray-500 text-sm">Log in to access your account</p>
+      </div>
+
+      <form @submit.prevent="handleRegister">
+        <!-- Name Input -->
+        <div class="relative mb-4">
+          <label for="name" class="text-sm text-gray-600 font-bold"
+            >Full Name</label
+          >
+          <input
+            v-model="name"
+            type="text"
+            id="name"
+            required
+            class="w-full p-3 bg-white bg-opacity-30 text-fuchsia-400 rounded-lg border border-gray-400 focus:outline-none focus:ring-2 focus:ring-fuchsia-400 focus:border-transparent"
+            placeholder="Enter your name"
+          />
+        </div>
+
+        <!-- Email Input -->
+        <div class="relative mb-4">
+          <label for="email" class="text-sm text-gray-600 font-bold"
+            >Email</label
+          >
+          <input
+            v-model="email"
+            type="email"
+            id="email"
+            required
+            class="w-full p-3 bg-white bg-opacity-30 text-fuchsia-400 rounded-lg border border-gray-400 focus:outline-none focus:ring-2 focus:ring-fuchsia-400 focus:border-transparent"
+            placeholder="Enter your email"
+          />
+        </div>
+
+        <!-- Password Input -->
+        <div class="relative mb-4">
+          <label for="password" class="text-sm text-gray-600 font-bold"
+            >Password</label
+          >
+          <input
+            v-model="password"
+            type="password"
+            id="password"
+            required
+            class="w-full p-3 bg-white bg-opacity-30 border-gray-400 text-fuchsia-400 rounded-lg border focus:outline-none focus:ring-2 focus:ring-fuchsia-400 focus:border-transparent"
+            placeholder="Enter your password"
+          />
+        </div>
+
+        <!-- Register Button -->
+        <button
+          type="submit"
+          class="w-full bg-gradient-to-r from-fuchsia-500 to-purple-600 text-white py-3 rounded-lg font-semibold shadow-md transition duration-300 hover:scale-105 hover:from-fuchsia-600 hover:to-purple-700"
+        >
+          Register
+        </button>
+
+        <!-- Error Message -->
+        <p
+          v-if="errorMessage"
+          class="text-red-400 text-center mt-2 transition-opacity duration-300"
+        >
+          {{ errorMessage }}
+        </p>
+      </form>
+
+      <!-- Divider -->
+      <div
+        class="my-4 flex items-center before:flex-1 before:border-t before:border-fuchsia-300 after:flex-1 after:border-t after:border-fuchsia-300"
+      >
+        <p class="mx-4 text-center text-fuchsia-300">OR</p>
+      </div>
+
+      <!-- Login Redirect -->
+      <p class="mt-4 text-center text-fuchsia-300 text-sm">
+        Already have an account?
+        <router-link
+          to="/login"
+          class="text-fuchsia-400 font-semibold hover:underline transition-all"
+        >
+          Login
+        </router-link>
       </p>
     </div>
-  </div>
+  </section>
 </template>
 
 <script setup lang="ts">
@@ -57,6 +110,7 @@ const password = ref("");
 const errorMessage = ref("");
 
 const auth = useAuth();
+
 const handleRegister = async () => {
   errorMessage.value = "";
   await auth.register(name.value, email.value, password.value);

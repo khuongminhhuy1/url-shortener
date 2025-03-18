@@ -1,48 +1,72 @@
 <template>
-  <section class="h-screen flex items-center justify-center bg-gray-100">
-    <div class="container w-full max-w-md p-6 bg-white rounded-lg shadow-lg">
-      <h2 class="text-2xl font-semibold text-center">Login</h2>
+  <section
+    class="h-screen flex items-center justify-center bg-gradient-to-br from-fuchsia-500 to-purple-600 text-fuchsia-600"
+  >
+    <div
+      class="w-full max-w-md p-8 bg-white shadow-lg rounded-lg animate-jump-in"
+    >
+      <!-- Logo / Branding -->
+      <div class="text-center mb-6">
+        <h2
+          class="text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-fuchsia-500 to-purple-600 pb-2"
+        >
+          Login
+        </h2>
+        <p class="text-gray-500 text-sm">Log in to access your account</p>
+      </div>
 
+      <!-- Login Form -->
       <form @submit.prevent="handleLogin">
         <!-- Email input -->
-        <div class="relative mb-4">
-          <label for="email" class="text-sm text-gray-600">Email address</label>
+        <div class="mb-4">
+          <label for="email" class="block text-gray-600 text-sm font-medium"
+            >Email address</label
+          >
           <input
             type="email"
             id="email"
             v-model="email"
             required
-            class="w-full p-2 border rounded mt-1"
+            class="w-full p-3 mt-1 rounded-lg border border-gray-300 focus:ring-2 focus:ring-fuchsia-500 focus:outline-none"
             placeholder="Enter your email"
           />
         </div>
 
         <!-- Password input -->
-        <div class="relative mb-4">
-          <label for="password" class="text-sm text-gray-600">Password</label>
+        <div class="mb-4">
+          <label for="password" class="block text-gray-600 text-sm font-medium"
+            >Password</label
+          >
           <input
             type="password"
             id="password"
             v-model="password"
             required
-            class="w-full p-2 border rounded mt-1"
+            class="w-full p-3 mt-1 rounded-lg border border-gray-300 focus:ring-2 focus:ring-fuchsia-500 focus:outline-none"
             placeholder="Enter your password"
           />
         </div>
 
         <!-- Remember me & Forgot password -->
-        <div class="flex justify-between items-center mb-4">
-          <label class="flex items-center text-sm">
-            <input type="checkbox" class="mr-2" /> Remember me
+        <div
+          class="flex justify-between items-center mb-4 text-sm text-gray-600"
+        >
+          <label class="flex items-center">
+            <input type="checkbox" class="mr-2 accent-fuchsia-500" /> Remember
+            me
           </label>
-          <a href="#" class="text-blue-500 text-sm">Forgot password?</a>
+          <router-link
+            to="/forgot-password"
+            class="text-fuchsia-600 hover:underline"
+            >Forgot Password ?</router-link
+          >
         </div>
 
         <!-- Submit button -->
         <button
           type="submit"
           :disabled="loading"
-          class="w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-600 disabled:bg-gray-400"
+          class="w-full py-3 text-white font-semibold rounded-lg bg-gradient-to-r from-fuchsia-500 to-purple-600 hover:from-fuchsia-600 hover:to-purple-700 transition-all disabled:bg-gray-400"
         >
           {{ loading ? "Signing in..." : "Sign in" }}
         </button>
@@ -54,26 +78,16 @@
       </form>
 
       <!-- Divider -->
-      <div
-        class="my-4 flex items-center before:flex-1 before:border-t before:border-gray-300 after:flex-1 after:border-t after:border-gray-300"
-      >
-        <p class="mx-4 text-center text-gray-600">OR</p>
+      <div class="my-6 flex items-center">
+        <div class="flex-1 border-t border-gray-300"></div>
+        <p class="mx-4 text-sm text-gray-600">OR</p>
+        <div class="flex-1 border-t border-gray-300"></div>
       </div>
 
-      <!-- Social login buttons -->
-      <button
-        class="w-full bg-blue-700 text-white py-2 rounded mb-2 hover:bg-blue-800"
-      >
-        Continue with Facebook
-      </button>
-      <button class="w-full bg-black text-white py-2 rounded hover:bg-gray-800">
-        Continue with X
-      </button>
-
       <!-- Register link -->
-      <p class="mt-4 text-center text-sm">
+      <p class="mt-6 text-center text-sm text-gray-600">
         Don't have an account?
-        <router-link to="/register" class="text-blue-500 hover:underline"
+        <router-link to="/register" class="text-fuchsia-500 hover:underline"
           >Sign up</router-link
         >
       </p>
@@ -98,3 +112,20 @@ const handleLogin = async () => {
   router.push("/");
 };
 </script>
+
+<style scoped>
+/* Smooth fade-in animation */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.animate-fadeIn {
+  animation: fadeIn 0.6s ease-out;
+}
+</style>

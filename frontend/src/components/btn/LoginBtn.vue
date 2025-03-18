@@ -14,7 +14,7 @@
       <div class="dropdown dropdown-end ml-2">
         <div tabindex="0" role="button" class="">
           <div class="">
-            <p>Hello ,{{ authStore.user.name }}</p>
+            <p>Hello ,{{ userInfo.user.name }}</p>
           </div>
         </div>
         <ul
@@ -53,7 +53,7 @@ const authStore = useAuthStore();
 function handleLogin() {
   router.push("/login");
 }
-
+const userInfo = localStorage.getItem("auth");
 // Handle logout
 async function handleLogout() {
   await auth.logout();

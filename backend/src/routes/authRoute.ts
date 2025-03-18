@@ -11,5 +11,6 @@ router.post("/login", catchAsync(authController.login));
 router.post("/logout", catchAsync(authController.logout));
 router.get("/refresh-token", catchAsync(tokenController.refreshTokenHandler));
 router.get("/verify-session", catchAsync(tokenController.verifySession));
-
+router.post("/forgot-password", catchAsync(authController.forgotPassword));
+router.post("/reset-password", catchAsync(authController.resetPassword));
 export default router;
