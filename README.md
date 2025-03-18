@@ -28,7 +28,7 @@ This is a **URL Shortener** application built with **Vue 3 (Pinia, Vue Router, T
 ### Backend (Node.js + Express)
 - **Express.js** for server-side logic
 - **Prisma ORM** for database management
-- **PostgreSQL** as the database
+- **mySQL** as the database
 - **Nodemailer** for email verification and password reset
 - **JSON Web Tokens (JWT)** for authentication
 - **Cookie-based authentication** (httpOnly, secure cookies)
