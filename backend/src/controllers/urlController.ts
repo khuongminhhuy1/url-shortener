@@ -49,11 +49,6 @@ class UrlController {
 
   async deleteUrl(req: Request, res: Response) {
     const { id } = req.params;
-    const userId = req.user?.id;
-    if (!userId) {
-      throw new AppError("User not authenticated", 401);
-    }
-
     // Ensure the URL belongs to the logged-in user
     const url = await prisma.shortURL.findUnique({
       where: { id },
@@ -62,11 +57,6 @@ class UrlController {
     if (!url) {
       throw new AppError("URL not found", 404);
     }
-
-    if (url.userId !== userId) {
-      throw new AppError("Unauthorized to delete this URL", 403);
-    }
-
     // Delete the URL
     await prisma.shortURL.delete({ where: { id } });
 

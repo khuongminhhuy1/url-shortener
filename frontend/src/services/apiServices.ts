@@ -18,6 +18,10 @@ class UrlService extends AxiosServices {
     const response = await this.get(`/api/url/${userId}/urls`);
     return response.data;
   }
+  async deleteUrl(id: string) {
+    const response = await this.delete(`/api/url/${id}`);
+    return response.data;
+  }
 }
 export const urlService = new UrlService();
 

@@ -76,7 +76,20 @@ export const useUrlStore = defineStore("urlStore", {
         this.loading = false;
       }
     },
-
+    async deleteUrl(id: string) {
+      this.loading = true;
+      this.error = "";
+      try {
+        await urlService.deleteUrl(id);
+        this.urls = this.urls.filter((url) => url.id !== id);
+      } catch (error: any) {
+        console.error("Delete URL Error:", error);
+        this.error = error.message || "Failed to delete URL";
+        throw error;
+      } finally {
+        this.loading = false;
+      }
+    },
     clearUrls() {
       this.urls = [];
     },
