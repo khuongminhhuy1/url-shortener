@@ -116,7 +116,6 @@ class AuthController {
   }
   async logout(req: Request, res: Response, next: NextFunction) {
     const refreshToken = req.cookies?.refreshToken;
-    console.log("refresh token: ", refreshToken);
     if (refreshToken) {
       // Hash the token
       const hashedRefreshToken = cryptoUtils.hashToken(refreshToken);
@@ -137,7 +136,6 @@ class AuthController {
           const userTokens = await prisma.refreshToken.findMany({
             where: { userId: req.user.userId },
           });
-          console.log(`User has ${userTokens.length} tokens in database`);
         }
       }
     }

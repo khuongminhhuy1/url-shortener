@@ -18,7 +18,6 @@ class UrlController {
       return next(new AppError("User authentication required", 401));
     }
     const newUrl = await urlServices.generateShortUrl(original, userId);
-    console.log("Shortened URL saved:", newUrl);
     return res.status(201).json(newUrl);
   }
 
