@@ -65,10 +65,15 @@
         <!-- Submit button -->
         <button
           type="submit"
-          :disabled="loading"
-          class="w-full py-3 text-white font-semibold rounded-lg bg-gradient-to-r from-fuchsia-500 to-purple-600 hover:from-fuchsia-600 hover:to-purple-700 transition-all disabled:bg-gray-400"
+          :disabled="authStore.loading"
+          class="w-full py-3 text-white font-semibold rounded-lg bg-gradient-to-r from-fuchsia-500 to-purple-600 hover:from-fuchsia-600 hover:to-purple-700 transition-all disabled:bg-gray-400 flex items-center justify-center"
         >
-          {{ loading ? "Signing in..." : "Sign in" }}
+          <svg
+            v-if="authStore.loading"
+            class="animate-spin h-5 w-5 mr-2 border-2 border-white border-t-transparent rounded-full"
+            viewBox="0 0 24 24"
+          ></svg>
+          {{ authStore.loading ? "Signing in..." : "Sign in" }}
         </button>
 
         <!-- Error Message -->
@@ -99,33 +104,17 @@
 import { ref } from "vue";
 import { useRouter } from "vue-router";
 import { useAuth } from "../../composables/useAuth";
+import { useAuthStore } from "../../store/authStore";
 
 const email = ref("");
 const password = ref("");
-const loading = ref(false);
 const errorMessage = ref("");
 const { login } = useAuth();
 const router = useRouter();
+const authStore = useAuthStore();
 
 const handleLogin = async () => {
   await login(email.value, password.value);
   router.push("/");
 };
 </script>
-
-<style scoped>
-/* Smooth fade-in animation */
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(-10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-.animate-fadeIn {
-  animation: fadeIn 0.6s ease-out;
-}
-</style>

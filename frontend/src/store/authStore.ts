@@ -6,6 +6,7 @@ export const useAuthStore = defineStore("auth", {
   state: () => ({
     user: null as NormalUser | AdminUser | null,
     isAuthenticated: false,
+    loading: false,
   }),
   persist: {
     key: "auth",
@@ -24,7 +25,9 @@ export const useAuthStore = defineStore("auth", {
         this.isAuthenticated = false;
       }
     },
-
+    setLoading(status: boolean) {
+      this.loading = status;
+    },
     logout() {
       this.user = null;
       this.isAuthenticated = false;

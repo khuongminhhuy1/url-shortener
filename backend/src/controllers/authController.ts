@@ -69,6 +69,7 @@ class AuthController {
       });
 
       res.status(200).json({ message: "Email verified successfully!" });
+      res.redirect(`${process.env.APP_URL}/verified`);
     } catch (error) {
       next(error);
     }

@@ -7,6 +7,7 @@ import Dashboard from "../views/user/Dashboard.vue";
 import RedirectPage from "../views/redirect/RedirectPage.vue";
 import ResetPassword from "../views/password/ResetPassword.vue";
 import ForgotPassword from "../views/password/ForgotPassword.vue";
+import Verified from "../views/verification/Verified.vue";
 
 const routes = [
   { path: "/", name: "home", component: Home },
@@ -30,6 +31,11 @@ const routes = [
     name: "forgot-password",
     component: ForgotPassword,
     meta: { noHeader: true },
+  },
+  {
+    path: "/verified",
+    name: "verified",
+    component: Verified,
   },
 ];
 

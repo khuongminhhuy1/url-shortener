@@ -63,9 +63,15 @@
         <!-- Register Button -->
         <button
           type="submit"
-          class="w-full bg-gradient-to-r from-fuchsia-500 to-purple-600 text-white py-3 rounded-lg font-semibold shadow-md transition duration-300 hover:scale-105 hover:from-fuchsia-600 hover:to-purple-700"
+          :disabled="authStore.loading"
+          class="w-full py-3 text-white font-semibold rounded-lg bg-gradient-to-r from-fuchsia-500 to-purple-600 hover:from-fuchsia-600 hover:to-purple-700 transition-all disabled:bg-gray-400 flex items-center justify-center"
         >
-          Register
+          <svg
+            v-if="authStore.loading"
+            class="animate-spin h-5 w-5 mr-2 border-2 border-white border-t-transparent rounded-full"
+            viewBox="0 0 24 24"
+          ></svg>
+          {{ authStore.loading ? "Registering..." : "Register" }}
         </button>
 
         <!-- Error Message -->
@@ -85,7 +91,7 @@
       </div>
 
       <!-- Login Redirect -->
-      <p class="mt-4 text-center text-fuchsia-300 text-sm">
+      <p class="mt-4 text-center text-gray-600 text-sm">
         Already have an account?
         <router-link
           to="/login"
@@ -102,6 +108,7 @@
 import { ref } from "vue";
 import { useRouter } from "vue-router";
 import { useAuth } from "../../composables/useAuth";
+import { useAuthStore } from "../../store/authStore";
 
 const router = useRouter();
 const name = ref("");
@@ -110,11 +117,10 @@ const password = ref("");
 const errorMessage = ref("");
 
 const auth = useAuth();
-
+const authStore = useAuthStore();
 const handleRegister = async () => {
   errorMessage.value = "";
   await auth.register(name.value, email.value, password.value);
-  alert("Email successfully created, please check your email for verification");
   router.push("/");
 };
 </script>
