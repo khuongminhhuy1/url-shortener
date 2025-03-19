@@ -1,19 +1,23 @@
 # Use official Node.js image
 FROM node:18
 
-# Set the working directory
+# Set the working directory inside the container
 WORKDIR /app
-# Copy package.json and install dependencies
+
+# Copy package.json and package-lock.json first (better caching)
 COPY package.json package-lock.json ./
+
+# Install dependencies
 RUN npm install
 
-# Copy the entire project
+# Copy the rest of the project files
 COPY . .
 
-# Set environment variables (you can also use .env file)
+# Build TypeScript (important if you're using TypeScript)
+RUN npm run build
 
 # Expose the backend port
 EXPOSE 5000
 
-# Start the server
-CMD ["npm", "run", "start"]
+# Start the server using the built files
+CMD ["node", "dist/index.js"]
