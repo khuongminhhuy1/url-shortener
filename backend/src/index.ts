@@ -12,7 +12,14 @@ dotenv.config(); // Use dotenv
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
-app.use(cors({ origin: process.env.APP_URL, credentials: true }));
+app.use(
+  cors({
+    origin: process.env.APP_URL,
+    credentials: true,
+    methods: "GET, POST, PUT, DELETE, OPTIONS",
+    allowedHeaders: "Origin, X-Requested-With, Content-Type, Accept",
+  })
+);
 app.use(errorHandler);
 
 app.use("/api/url", urlRoute); // Use urlRoute
