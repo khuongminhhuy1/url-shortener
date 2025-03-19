@@ -17,6 +17,9 @@ app.options("*", cors());
 
 app.use("/api/url", urlRoute); // Use urlRoute
 app.use("/api/auth", authRoute); // Use authRoute
+app.get("/health", (req: Request, res: Response) => {
+  res.status(200).send("Server is running");
+});
 
 app.use(errorHandler);
 app.listen(PORT, () => console.log(`Server running on port ${PORT} `));
