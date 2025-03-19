@@ -7,14 +7,17 @@ import authRoute from "./routes/authRoute.js"; // Import authRoute
 import cookieParser from "cookie-parser";
 
 const app = express(); // Create an express app
-const PORT = process.env.PORT || 3000;
+const PORT = parseInt(process.env.PORT as string, 10) || 3000;
+const app_url = process.env.APP_URL;
 dotenv.config(); // Use dotenv
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(
   cors({
-    origin: true,
+    origin: app_url,
+    credentials: true,
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
   })
 );
 app.options("*", cors());
@@ -26,4 +29,6 @@ app.get("/health", (req: Request, res: Response) => {
 });
 
 app.use(errorHandler);
-app.listen(PORT, () => console.log(`Server running on port ${PORT} `));
+app.listen(PORT, "0.0.0.0", () =>
+  console.log(`Server running on port ${PORT} `)
+);

@@ -7,6 +7,9 @@ class AxiosService {
   private apiClient = axios.create({
     baseURL: API_SERVER_URL,
     withCredentials: true,
+    headers: {
+      "Content-Type": "application/json",
+    },
   });
 
   private toast = useToast();
