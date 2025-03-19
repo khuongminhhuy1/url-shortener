@@ -20,6 +20,7 @@ app.use(
     allowedHeaders: "Origin, X-Requested-With, Content-Type, Accept",
   })
 );
+app.options("*", cors());
 app.use(errorHandler);
 
 app.use("/api/url", urlRoute); // Use urlRoute
