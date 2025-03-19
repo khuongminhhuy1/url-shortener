@@ -7,7 +7,7 @@ import authRoute from "./routes/authRoute.js"; // Import authRoute
 import cookieParser from "cookie-parser";
 
 const app = express(); // Create an express app
-
+const PORT = process.env.PORT || 3000;
 dotenv.config(); // Use dotenv
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -21,10 +21,9 @@ app.use(
   })
 );
 app.options("*", cors());
-app.use(errorHandler);
 
 app.use("/api/url", urlRoute); // Use urlRoute
 app.use("/api/auth", authRoute); // Use authRoute
-app.listen(process.env.PORT, () =>
-  console.log(`Server running on port ${process.env.PORT} `)
-);
+
+app.use(errorHandler);
+app.listen(PORT, () => console.log(`Server running on port ${PORT} `));
