@@ -13,9 +13,15 @@ dotenv.config(); // Use dotenv
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
-app.use(cors());
-app.options("*", cors());
+const corsOpts = {
+  origin: "*",
 
+  methods: ["GET", "POST"],
+
+  allowedHeaders: ["Content-Type"],
+};
+
+app.use(cors(corsOpts));
 app.use("/api/url", urlRoute); // Use urlRoute
 app.use("/api/auth", authRoute); // Use authRoute
 app.get("/health", (req: Request, res: Response) => {
