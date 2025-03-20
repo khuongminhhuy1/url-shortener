@@ -1,6 +1,8 @@
 # Use official Node.js image
 FROM node:18
 
+
+WORKDIR /app
 # Copy package.json and package-lock.json first (better caching)
 COPY package.json package-lock.json ./
 
@@ -12,6 +14,7 @@ COPY . .
 
 # Build TypeScript (important if you're using TypeScript)
 RUN npm run build
+RUN ls -R
 
 # Expose the backend port
 EXPOSE 5000
