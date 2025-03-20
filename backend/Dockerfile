@@ -1,9 +1,6 @@
 # Use official Node.js image
 FROM node:18
 
-# Set the working directory inside the container
-WORKDIR /app
-
 # Copy package.json and package-lock.json first (better caching)
 COPY package.json package-lock.json ./
 
