@@ -15,6 +15,7 @@ COPY . .
 # Build TypeScript (important if you're using TypeScript)
 RUN npm run build
 RUN ls -R /app/dist
+RUN ls -R /app/src
 
 # Expose the backend port
 EXPOSE 5000
