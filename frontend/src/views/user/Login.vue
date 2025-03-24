@@ -118,6 +118,6 @@ const handleLogin = async () => {
   router.push("/");
 };
 onMounted(() => {
-  authStore.setLoading(false);
+ authStore.setLoading(false);
 });
 </script>

@@ -68,8 +68,8 @@ class AuthController {
         where: { id: verificationRecord.id },
       });
 
-      res.status(200).json({ message: "Email verified successfully!" });
-      res.redirect(`${process.env.APP_URL}/verified`);
+      
+      return res.status(200).redirect(`${process.env.APP_URL}/verified`);
     } catch (error) {
       next(error);
     }

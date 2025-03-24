@@ -1,15 +1,15 @@
-import type { UserData } from "./../types/userData";
-import { ref } from "vue";
+import type { UserData } from "../types/userData";
 import { useRouter } from "vue-router";
 import { useAuthStore } from "../store/authStore";
 import { authService } from "../services/apiServices";
 import { jwtDecode } from "jwt-decode";
+import { ref } from "vue";
 
 export function useAuth() {
   const authStore = useAuthStore();
   const router = useRouter();
-  const loading = ref<boolean>(false);
   const errorMessage = ref<string>("");
+
   async function register(
     name: string,
     email: string,
@@ -20,7 +20,7 @@ export function useAuth() {
 
     try {
       await authService.register(name, email, password);
-      router.push("/login");
+      await router.push("/login");
     } catch (error: any) {
       console.error("Register Error:", error);
       errorMessage.value =
@@ -33,12 +33,16 @@ export function useAuth() {
   async function login(email: string, password: string): Promise<void> {
     authStore.setLoading(true);
     errorMessage.value = "";
+
     try {
       const response = await authService.login(email, password);
-      const token: string = response.token;
+      const token = response.token;
+
+      // Decode token to get user data
       const decoded = jwtDecode<UserData>(token);
       authStore.setUser(decoded);
-      router.push("/"); // Redirect after login
+
+      await router.push("/"); // Redirect after login
     } catch (error: any) {
       console.error("Login Error:", error);
       errorMessage.value = error.response?.data?.message || "Login failed!";
@@ -49,10 +53,11 @@ export function useAuth() {
 
   async function logout(): Promise<void> {
     authStore.setLoading(true);
+
     try {
       await authService.logout();
       authStore.setUser(null);
-      router.push("/");
+      await router.push("/login"); // Redirect to login after logout
     } catch (error: any) {
       console.error("Logout Error:", error);
     } finally {
@@ -62,6 +67,7 @@ export function useAuth() {
 
   async function checkAuthState(): Promise<boolean> {
     authStore.setLoading(true);
+
     try {
       const response = await authService.verifySession();
       if (response.data?.user) {
@@ -78,5 +84,5 @@ export function useAuth() {
     }
   }
 
-  return { register, login, logout, loading, errorMessage, checkAuthState };
+  return { register, login, logout, checkAuthState, errorMessage };
 }
