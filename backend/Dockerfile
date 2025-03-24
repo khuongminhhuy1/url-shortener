@@ -21,7 +21,7 @@ RUN ls -R /app/dist
 RUN ls -R /app/src
 
 # Expose the backend port
-EXPOSE 5000
+EXPOSE 8080
 
 # Start the server using the built files
 CMD ["node", "dist/index.js"]

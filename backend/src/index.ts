@@ -1,6 +1,6 @@
+import dotenv from "dotenv"; // Import dotenv
 import express, { Request, Response } from "express"; // Import express
 import cors from "cors"; // Import cors
-import dotenv from "dotenv"; // Import dotenv
 import { errorHandler } from "./middlewares/error/errorHandler.js";
 import urlRoute from "./routes/urlRoute.js"; // Import urlRoute
 import authRoute from "./routes/authRoute.js"; // Import authRoute
