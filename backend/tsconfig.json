@@ -3,7 +3,6 @@
     "target": "ES2016",
     "module": "CommonJS",
     "rootDir": "./src",
-    "lib": ["ESNext", "DOM"],
     "resolveJsonModule": true,
     "declaration": true,
     "outDir": "./dist",
