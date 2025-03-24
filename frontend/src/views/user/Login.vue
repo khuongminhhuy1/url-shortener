@@ -101,7 +101,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue";
+import { onMounted, ref } from "vue";
 import { useRouter } from "vue-router";
 import { useAuth } from "../../composables/useAuth";
 import { useAuthStore } from "../../store/authStore";
@@ -117,4 +117,7 @@ const handleLogin = async () => {
   await login(email.value, password.value);
   router.push("/");
 };
+onMounted(() => {
+  authStore.setLoading(false);
+});
 </script>
