@@ -13,15 +13,8 @@ dotenv.config(); // Use dotenv
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
-const corsOpts = {
-  origin: "*",
 
-  methods: ["GET", "POST"],
-
-  allowedHeaders: ["Content-Type"],
-};
-
-app.use(cors(corsOpts));
+app.use(cors({ origin: app_url, credentials: true })); // Use cors
 app.use("/api/url", urlRoute); // Use urlRoute
 app.use("/api/auth", authRoute); // Use authRoute
 app.get("/health", (req: Request, res: Response) => {
@@ -29,6 +22,4 @@ app.get("/health", (req: Request, res: Response) => {
 });
 
 app.use(errorHandler);
-app.listen(PORT, "0.0.0.0", () =>
-  console.log(`Server running on port ${PORT} `)
-);
+app.listen(PORT, () => console.log(`Server running on port ${PORT} `));
