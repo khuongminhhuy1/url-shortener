@@ -76,8 +76,10 @@ $ npm run dev
 | `DELETE` | `/api/url/:id` | Delete a short URL |
 
 ---
-## Demo
-[Demo](https://url-shortener-8hr.pages.dev/)
+## 📌 Demo
+[Go to page](https://url-shortener-8hr.pages.dev/)
+
+---
 ## 🎯 Future Enhancements
 
 - ✅ **QR Code Generation** for shortened URLs
