@@ -1,9 +1,9 @@
 {
   "compilerOptions": {
-    "target": "ESNext",
-    "module": "ESNext",
+    "target": "ES2016",
+    "module": "CommonJS",
     "rootDir": "./src",
-    "moduleResolution": "node",
+    "lib": ["ESNext", "DOM"],
     "resolveJsonModule": true,
     "declaration": true,
     "outDir": "./dist",
